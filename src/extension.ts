@@ -47,13 +47,13 @@ prefiexes[Status.DELETED] = "chore: delete";
 prefiexes[Status.INDEX_DELETED] = "chore: delete";
 prefiexes[Status.MODIFIED] = "chore: update";
 prefiexes[Status.INDEX_MODIFIED] = "chore: update";
-prefiexes[Status.INDEX_RENAMED] = "chore: renamed";
+prefiexes[Status.INDEX_RENAMED] = "chore: rename";
 
 const preps = new Map<string, string>();
 preps.set("feat: add", "to");
 preps.set("chore: delete", "from");
 preps.set("chore: update", "in");
-preps.set("chore: renamed", "in");
+preps.set("chore: rename", "in");
 
 interface Repository {
   orginal: GitRepository;
@@ -84,7 +84,7 @@ function writeAutoCommit(repository: Repository) {
     { type: "feat: add", files: [], count: 0 },
     { type: "chore: delete", files: [], count: 0 },
     { type: "chore: update", files: [], count: 0 },
-    { type: "chore: renamed", files: [], count: 0 },
+    { type: "chore: rename", files: [], count: 0 },
   ];
 
   changes.forEach((change) => {
@@ -121,38 +121,38 @@ function writeAutoCommit(repository: Repository) {
     let samePath = commit.files.every(
       (file) => file.path === commit?.files[0].path
     );
-    if (changes.length >= 3 && !samePath) {
+    if (changes.length >= 4 && !samePath) {
       messages.push(`${commit.type} ${commit.count} files`);
-    } else if (changes.length >= 3 && samePath) {
+    } else if (changes.length >= 4 && samePath) {
       messages.push(
         `${commit.type} ${commit.count} files ${preps.get(commit.type)} ${
           commit.files[0].path
         }`
       );
-    } else if (changes.length === 2 && !samePath) {
+    } else if (changes.length === 3 && !samePath) {
       messages.push(
         `${commit.type} ${commit.files.map((file) => file.name).join(" and ")}`
       );
-    } else if (changes.length <= 2 && samePath) {
+    } else if (changes.length <= 3 && samePath) {
       messages.push(
         `${commit.type} ${commit.files
           .map((file) => file.name)
           .join(" and ")} ${preps.get(commit.type)} ${commit.files[0].path}`
       );
     }
-  } else if (changes.length <= 2) {
+  } else if (changes.length <= 3) {
     commits.forEach((commit) => {
       if (commit.count === 0) {
         return;
       }
-      if (commit.count <= 2) {
+      if (commit.count <= 3) {
         messages.push(
           `${commit.type} ${commit.files.map((file) => file.name).join(", ")}`
         );
       }
     });
   } else {
-    messages.push(`changed ${changes.length} files`);
+    messages.push(`chore: change ${changes.length} files`);
   }
 
   let message = messages.join(" ");
