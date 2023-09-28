@@ -4,15 +4,15 @@
   "description": "A vscode extension to auto git commit",
   "version": "0.0.5",
   "author": {
-    "email": "kadir@kadirgun.com",
-    "name": "Kadir Gün",
-    "url": "https://github.com/kadirgun"
+    "email": "alexandru.c.petrini@gmail.com",
+    "name": "Alexandru Petrini",
+    "url": "https://github.com/alexandrupetrini"
   },
   "repository": {
     "url": "https://github.com/kadirgun/auto-git-commit.git",
     "type": "git"
   },
-  "publisher": "kadirgun",
+  "publisher": "AlexandruPetrini",
   "engines": {
     "vscode": "^1.69.1"
   },
