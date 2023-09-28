@@ -40,20 +40,20 @@ class InputBox {
 }
 
 const prefiexes: string[] = [];
-prefiexes[Status.ADDED_BY_US] = "added";
-prefiexes[Status.UNTRACKED] = "added";
-prefiexes[Status.INDEX_ADDED] = "added";
-prefiexes[Status.DELETED] = "deleted";
-prefiexes[Status.INDEX_DELETED] = "deleted";
-prefiexes[Status.MODIFIED] = "modified";
-prefiexes[Status.INDEX_MODIFIED] = "modified";
-prefiexes[Status.INDEX_RENAMED] = "renamed";
+prefiexes[Status.ADDED_BY_US] = "feat: add";
+prefiexes[Status.UNTRACKED] = "feat: add";
+prefiexes[Status.INDEX_ADDED] = "feat: add";
+prefiexes[Status.DELETED] = "chore: delete";
+prefiexes[Status.INDEX_DELETED] = "chore: delete";
+prefiexes[Status.MODIFIED] = "chore: update";
+prefiexes[Status.INDEX_MODIFIED] = "chore: update";
+prefiexes[Status.INDEX_RENAMED] = "chore: renamed";
 
 const preps = new Map<string, string>();
-preps.set("added", "to");
-preps.set("deleted", "from");
-preps.set("modified", "in");
-preps.set("renamed", "in");
+preps.set("feat: add", "to");
+preps.set("chore: delete", "from");
+preps.set("chore: update", "in");
+preps.set("chore: renamed", "in");
 
 interface Repository {
   orginal: GitRepository;
@@ -81,10 +81,10 @@ function writeAutoCommit(repository: Repository) {
   }
 
   let commits: Commit[] = [
-    { type: "added", files: [], count: 0 },
-    { type: "deleted", files: [], count: 0 },
-    { type: "modified", files: [], count: 0 },
-    { type: "renamed", files: [], count: 0 },
+    { type: "feat: add", files: [], count: 0 },
+    { type: "chore: delete", files: [], count: 0 },
+    { type: "chore: update", files: [], count: 0 },
+    { type: "chore: renamed", files: [], count: 0 },
   ];
 
   changes.forEach((change) => {
@@ -201,7 +201,7 @@ export function activate(context: vscode.ExtensionContext) {
       };
       listenRepositoryChanges(repository);
     });
-    
+
     git.onDidOpenRepository((orginal) => {
       let repository: Repository = {
         orginal: orginal,
